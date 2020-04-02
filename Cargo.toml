@@ -1,0 +1,26 @@
+[package]
+name = "rust-graphql-actix-juniper-diesel-example"
+version = "0.1.0"
+authors = ["Mihai Dinculescu <mihai.dinculescu@outlook.com>"]
+edition = "2018"
+
+[dependencies]
+# misc
+futures = "0.3.4"
+dotenv = "0.15.0"
+chrono = "0.4.11"
+
+# web server
+actix-web = "2.0.0"
+actix-rt = "1.0.0"
+env_logger = "0.7.1"
+
+# database
+diesel = { version = "1.4.0", features = ["postgres", "r2d2", "chrono"] }
+diesel_migrations = "1.4.0"
+
+# graphql
+juniper = "0.14.2"
+serde = "1.0.105"
+serde_json = "1.0.50"
+serde_derive = "1.0.105"

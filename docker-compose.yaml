@@ -1,0 +1,30 @@
+version: '3.7'
+
+services:
+  server:
+    build: .
+    container_name: graphql-example-server
+    depends_on:
+      - storage
+    environment:
+      - HOST=0.0.0.0
+      - POSTGRES_DB_HOST=storage
+      - PORT=${PORT}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - API_KEY=${API_KEY}
+    ports:
+      - ${PORT}:${PORT}
+  storage:
+    image: postgres:12.2
+    container_name: graphql-example-storage
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+
+volumes:
+  postgresql-storage:
+    external:
+      name: graphql-example-storage
