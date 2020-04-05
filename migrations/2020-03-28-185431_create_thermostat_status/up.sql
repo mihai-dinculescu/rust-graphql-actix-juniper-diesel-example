@@ -4,4 +4,4 @@ CREATE TABLE thermostat_status (
     timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-INSERT INTO thermostat_status(id, status) VALUES (1, false);
+INSERT INTO thermostat_status(status) VALUES (false);
