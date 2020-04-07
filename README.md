@@ -13,6 +13,7 @@ I've started with only very little knowledge of Rust. The learning curve was pre
   "key": "123"
 }
 ```
+- Cors
 - Docker Compose
 
 # Setup

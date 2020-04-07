@@ -6,6 +6,7 @@ extern crate serde;
 
 use std::io;
 
+use actix_cors::Cors;
 use actix_web::{middleware, web, App, HttpServer};
 use diesel_migrations::run_pending_migrations;
 use dotenv::dotenv;
@@ -53,6 +54,7 @@ async fn main() -> io::Result<()> {
             .data(schema.clone())
             .data(key.clone())
             .wrap(middleware::Logger::default())
+            .wrap(Cors::new().finish()) // allow all cross origin requests
             .service(web::resource("/graphql").route(web::post().to(graphql)))
             .service(web::resource("/playground").route(web::get().to(playground)))
     })
