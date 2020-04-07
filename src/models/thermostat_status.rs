@@ -1,5 +1,5 @@
+use chrono::NaiveDateTime;
 use juniper::{GraphQLInputObject, GraphQLObject};
-use chrono::{NaiveDateTime};
 
 use diesel::prelude::*;
 

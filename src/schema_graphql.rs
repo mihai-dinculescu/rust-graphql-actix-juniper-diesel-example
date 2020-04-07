@@ -1,8 +1,8 @@
 use std::sync::Arc;
 
+use diesel::PgConnection;
 use juniper::FieldResult;
 use juniper::RootNode;
-use diesel::PgConnection;
 
 use crate::db::DbPooledConnection;
 use crate::models::thermostat_status::*;
@@ -40,7 +40,10 @@ pub struct MutationRoot;
 #[juniper::object(Context = Context)]
 impl MutationRoot {
     #[graphql(description = "Set the thermostat status")]
-    fn set_thermostat_status(context: &Context, data: NewThermostatStatus) -> FieldResult<ThermostatStatus> {
+    fn set_thermostat_status(
+        context: &Context,
+        data: NewThermostatStatus,
+    ) -> FieldResult<ThermostatStatus> {
         let connection: &PgConnection = &context.db;
 
         ThermostatStatus::insert(connection, data)?;
@@ -57,5 +60,7 @@ pub fn create_schema() -> SchemaGraphQL {
 }
 
 pub fn create_context(pg_pool: DbPooledConnection) -> Context {
-    Context {db: Arc::new(pg_pool)}
+    Context {
+        db: Arc::new(pg_pool),
+    }
 }

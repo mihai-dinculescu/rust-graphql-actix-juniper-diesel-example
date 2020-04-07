@@ -1,7 +1,7 @@
 use diesel::pg::PgConnection;
+use diesel::r2d2::{ConnectionManager, Pool, PoolError, PooledConnection};
 use dotenv::dotenv;
 use std::env;
-use diesel::r2d2::{ Pool, PooledConnection, ConnectionManager, PoolError };
 
 pub type DbPool = Pool<ConnectionManager<PgConnection>>;
 pub type DbPooledConnection = PooledConnection<ConnectionManager<PgConnection>>;
@@ -19,7 +19,10 @@ pub fn establish_connection() -> DbPool {
     let postgres_user = env::var("POSTGRES_USER").expect("POSTGRES_USER must be set");
     let postgres_password = env::var("POSTGRES_PASSWORD").expect("POSTGRES_PASSWORD must be set");
 
-    let database_url = format!("postgres://{}:{}@{}/{}", postgres_user, postgres_password, postgres_db_host, postgres_db);
+    let database_url = format!(
+        "postgres://{}:{}@{}/{}",
+        postgres_user, postgres_password, postgres_db_host, postgres_db
+    );
 
     init_pool(&database_url).expect(&format!("Error connecting to {}", database_url))
 }

@@ -1,14 +1,14 @@
 use std::sync::Arc;
 
-use actix_web::{web, Error, HttpRequest, HttpResponse};
 use actix_web::http::header::HeaderMap;
-use juniper::http::{GraphQLRequest, playground::playground_source};
+use actix_web::{web, Error, HttpRequest, HttpResponse};
+use juniper::http::{playground::playground_source, GraphQLRequest};
 use juniper::serde::ser::Error as SerdeError;
 
 use crate::db::DbPool;
-use crate::schema_graphql::{SchemaGraphQL, create_context};
-use crate::models::key::Key;
 use crate::models::errors::GraphQLErrors;
+use crate::models::key::Key;
+use crate::schema_graphql::{create_context, SchemaGraphQL};
 
 pub async fn playground() -> HttpResponse {
     let html = playground_source("/graphql");
@@ -22,7 +22,7 @@ pub async fn graphql(
     st: web::Data<Arc<SchemaGraphQL>>,
     data: web::Json<GraphQLRequest>,
     pool: web::Data<DbPool>,
-    key: web::Data<Key>
+    key: web::Data<Key>,
 ) -> Result<HttpResponse, Error> {
     let headers = req.headers();
 
@@ -41,9 +41,7 @@ pub async fn graphql(
     let body = web::block(move || {
         let db_pool = pool
             .get()
-            .map_err(|e| {
-                serde_json::error::Error::custom(e)
-            })?;
+            .map_err(|e| serde_json::error::Error::custom(e))?;
 
         let ctx = create_context(db_pool);
         let res = data.execute(&st, &ctx);
@@ -60,12 +58,15 @@ pub async fn graphql(
 fn validate_key<'a>(headers: &'a HeaderMap, key: &'a Key) -> Result<(), &'a str> {
     match headers.get("key") {
         Some(value) => {
-            let value = value.to_str().map_err(|e| {serde_json::error::Error::custom(e) }).unwrap();
+            let value = value
+                .to_str()
+                .map_err(|e| serde_json::error::Error::custom(e))
+                .unwrap();
 
             if value != key.value {
                 return Err("Invalid Key");
             }
-        },
+        }
         None => {
             return Err("Missing header: key");
         }
