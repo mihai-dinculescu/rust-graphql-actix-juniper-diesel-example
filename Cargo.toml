@@ -21,6 +21,6 @@ diesel_migrations = "1.4.0"
 
 # graphql
 juniper = "0.14.2"
-serde = "1.0.105"
-serde_json = "1.0.50"
-serde_derive = "1.0.105"
+serde = "1.0.106"
+serde_derive = "1.0.106"
+serde_json = "1.0.51"
