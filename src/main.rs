@@ -55,7 +55,11 @@ async fn main() -> io::Result<()> {
             .data(key.clone())
             .wrap(middleware::Logger::default())
             .wrap(Cors::new().finish()) // allow all cross origin requests
-            .service(web::resource("/graphql").route(web::post().to(graphql)))
+            .service(
+                web::resource("/graphql")
+                    .route(web::get().to(graphql))
+                    .route(web::post().to(graphql)),
+            )
             .service(web::resource("/playground").route(web::get().to(playground)))
     })
     .bind(format!("{}:{}", host, port))?

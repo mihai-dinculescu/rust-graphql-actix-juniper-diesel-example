@@ -1,6 +1,7 @@
 use std::sync::Arc;
 
 use actix_web::http::header::HeaderMap;
+use actix_web::http::Method;
 use actix_web::{web, Error, HttpRequest, HttpResponse};
 use juniper::http::{playground::playground_source, GraphQLRequest};
 use juniper::serde::ser::Error as SerdeError;
@@ -20,13 +21,22 @@ pub async fn playground() -> HttpResponse {
 pub async fn graphql(
     req: HttpRequest,
     st: web::Data<Arc<SchemaGraphQL>>,
-    data: web::Json<GraphQLRequest>,
+    data_query: Option<web::Query<GraphQLRequest>>,
+    data_body: Option<web::Json<GraphQLRequest>>,
     pool: web::Data<DbPool>,
     key: web::Data<Key>,
 ) -> Result<HttpResponse, Error> {
     let headers = req.headers();
 
-    // let instrospection queries through
+    // fetch data from
+    // query string if this is a GET
+    // body if this is a POST
+    let data = match req.method() {
+        &Method::GET => data_query.unwrap().into_inner(),
+        _ => data_body.unwrap().into_inner(),
+    };
+
+    // let introspection queries through
     if data.operation_name() != Some("IntrospectionQuery") {
         // validate key for all other requests
         if let Err(e) = validate_key(&headers, key.get_ref()) {

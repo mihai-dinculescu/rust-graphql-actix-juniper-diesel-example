@@ -5,6 +5,7 @@ I've started with only very little knowledge of Rust. The learning curve was pre
 
 ## Main features
 - GraphQL Server & Playground (Actix + Juniper)
+- Queries using both POST and GET
 - Database Access (Diesel + Postgres)
   - Pending migrations run automatically on web server startup
 - Authentication (API key in headers)
