@@ -1,18 +1,18 @@
-#[derive(Debug, Serialize, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GraphQlErrorLocation {
-    line: i32,
-    column: i32,
+    pub line: i32,
+    pub column: i32,
 }
 
-#[derive(Debug, Serialize, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GraphQLError {
-    message: String,
-    locations: Vec<GraphQlErrorLocation>,
+    pub message: String,
+    pub locations: Vec<GraphQlErrorLocation>,
 }
 
-#[derive(Debug, Serialize, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GraphQLErrors {
-    errors: Vec<GraphQLError>,
+    pub errors: Vec<GraphQLError>,
 }
 
 impl GraphQLErrors {

@@ -436,6 +436,7 @@ checksum = "80094f509cf8b5ae86a4966a39b3ff66cd7e2a3e594accec3743ff3fabeab5b2"
 dependencies = [
  "num-integer",
  "num-traits",
+ "serde",
  "time",
 ]
 
@@ -1278,6 +1279,7 @@ name = "rust-graphql-actix-juniper-diesel-example"
 version = "0.2.0"
 dependencies = [
  "actix-cors",
+ "actix-http",
  "actix-rt",
  "actix-web",
  "chrono",
@@ -1290,6 +1292,7 @@ dependencies = [
  "serde",
  "serde_derive",
  "serde_json",
+ "serial_test",
 ]
 
 [[package]]
@@ -1360,6 +1363,28 @@ dependencies = [
  "itoa",
  "serde",
  "url",
+]
+
+[[package]]
+name = "serial_test"
+version = "0.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "fef5f7c7434b2f2c598adc6f9494648a1e41274a75c0ba4056f680ae0c117fd6"
+dependencies = [
+ "lazy_static",
+ "parking_lot",
+ "serial_test_derive",
+]
+
+[[package]]
+name = "serial_test_derive"
+version = "0.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d08338d8024b227c62bd68a12c7c9883f5c66780abaef15c550dc56f46ee6515"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn",
 ]
 
 [[package]]

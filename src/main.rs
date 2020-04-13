@@ -5,7 +5,7 @@ use actix_web::{middleware, web, App, HttpServer};
 use diesel_migrations::run_pending_migrations;
 use dotenv::dotenv;
 
-use ::lib::db::establish_connection;
+use ::lib::db::{establish_connection, DatabaseKind};
 use ::lib::handlers::graphql::{graphql, playground};
 use ::lib::models::key::Key;
 use ::lib::schema_graphql::create_schema;
@@ -28,7 +28,7 @@ async fn main() -> io::Result<()> {
     let schema = std::sync::Arc::new(create_schema());
 
     // database connection pool
-    let db_pool = establish_connection();
+    let db_pool = establish_connection(DatabaseKind::Example);
 
     // run pending migrations
     let connection = db_pool.get().unwrap();

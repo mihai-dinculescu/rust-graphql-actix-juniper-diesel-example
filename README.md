@@ -15,12 +15,14 @@ I've started with only very little knowledge of Rust. The learning curve was pre
 }
 ```
 - Cors
+- Integration tests
 - Docker Compose
 
 # Setup
+## Rust & Cargo
 Install `rust` and `cargo` via `rustup` (https://rustup.rs/). The stable version is OK.
 
-Diesel CLI
+## Diesel CLI
 ```
 cargo install diesel_cli --no-default-features --features postgres
 ```
@@ -28,6 +30,12 @@ cargo install diesel_cli --no-default-features --features postgres
 Optional: Cargo Watch (not required, but it speeds up development greatly)
 ```
 cargo install cargo-watch
+```
+
+## Databases
+```
+CREATE DATABASE rust_graphql_example;
+CREATE DATABASE rust_graphql_example_test;
 ```
 
 # Run locally
@@ -43,9 +51,14 @@ cargo watch -x run
 
 Open http://localhost:8080/playground.
 
+# Run Integration tests
+```
+cargo test
+```
+
 # Run in Docker
 ```
-docker volume create --name=graphql-example-storage
+docker volume create --name=rust-graphql-example-storage
 docker-compose up
 ```
 

@@ -3,7 +3,7 @@ version: "3.7"
 services:
   server:
     build: .
-    container_name: graphql-example-server
+    container_name: rust-graphql-example-server
     depends_on:
       - storage
     environment:
@@ -18,7 +18,7 @@ services:
       - ${PORT}:80
   storage:
     image: postgres:12.2
-    container_name: graphql-example-storage
+    container_name: rust-graphql-example-storage
     environment:
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_USER=${POSTGRES_USER}
@@ -29,4 +29,4 @@ services:
 volumes:
   storage-postgresql:
     external:
-      name: graphql-example-storage
+      name: rust-graphql-example-storage
