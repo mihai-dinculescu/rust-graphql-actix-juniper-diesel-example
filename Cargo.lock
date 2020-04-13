@@ -1275,7 +1275,7 @@ dependencies = [
 
 [[package]]
 name = "rust-graphql-actix-juniper-diesel-example"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "actix-cors",
  "actix-rt",

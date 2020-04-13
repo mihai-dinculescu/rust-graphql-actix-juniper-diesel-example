@@ -1,8 +1,12 @@
 [package]
 name = "rust-graphql-actix-juniper-diesel-example"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["Mihai Dinculescu <mihai.dinculescu@outlook.com>"]
 edition = "2018"
+
+[lib]
+name = "lib"
+path = "src/lib.rs"
 
 [dependencies]
 # misc

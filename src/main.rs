@@ -1,9 +1,3 @@
-extern crate dotenv;
-#[macro_use]
-extern crate diesel;
-#[macro_use]
-extern crate serde;
-
 use std::io;
 
 use actix_cors::Cors;
@@ -11,16 +5,10 @@ use actix_web::{middleware, web, App, HttpServer};
 use diesel_migrations::run_pending_migrations;
 use dotenv::dotenv;
 
-mod db;
-mod handlers;
-mod models;
-mod schema;
-mod schema_graphql;
-
-use crate::db::establish_connection;
-use crate::handlers::graphql::{graphql, playground};
-use crate::models::key::Key;
-use crate::schema_graphql::create_schema;
+use ::lib::db::establish_connection;
+use ::lib::handlers::graphql::{graphql, playground};
+use ::lib::models::key::Key;
+use ::lib::schema_graphql::create_schema;
 
 #[actix_rt::main]
 async fn main() -> io::Result<()> {
