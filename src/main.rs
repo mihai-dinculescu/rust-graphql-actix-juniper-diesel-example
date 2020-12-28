@@ -1,7 +1,7 @@
 use std::io;
 
 use actix_cors::Cors;
-use actix_web::{middleware, web, App, HttpServer};
+use actix_web::{middleware, web, App, HttpResponse, HttpServer};
 use diesel_migrations::run_pending_migrations;
 use dotenv::dotenv;
 
@@ -35,12 +35,15 @@ async fn main() -> io::Result<()> {
     run_pending_migrations(&connection)
         .map_err(|e| std::io::Error::new(std::io::ErrorKind::Other, e))?;
 
+    println!("Starting GraphQL server at http://{}:{}", host, port);
+
     // start http server
     HttpServer::new(move || {
         App::new()
             .data(db_pool.clone())
             .data(schema.clone())
             .data(key.clone())
+            .wrap(middleware::Compress::default())
             .wrap(middleware::Logger::default())
             .wrap(Cors::new().finish()) // allow all cross origin requests
             .service(
@@ -49,6 +52,11 @@ async fn main() -> io::Result<()> {
                     .route(web::post().to(graphql)),
             )
             .service(web::resource("/playground").route(web::get().to(playground)))
+            .default_service(web::route().to(|| {
+                HttpResponse::Found()
+                    .header("location", "/playground")
+                    .finish()
+            }))
     })
     .bind(format!("{}:{}", host, port))?
     .run()
