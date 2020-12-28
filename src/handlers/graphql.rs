@@ -23,7 +23,7 @@ pub async fn graphql(
     st: web::Data<Arc<SchemaGraphQL>>,
     data_query: Option<web::Query<GraphQLRequest>>,
     data_body: Option<web::Json<GraphQLRequest>>,
-    pool: web::Data<DbPool>,
+    db_pool: web::Data<DbPool>,
     key: web::Data<Key>,
 ) -> Result<HttpResponse, Error> {
     let headers = req.headers();
@@ -46,18 +46,11 @@ pub async fn graphql(
         }
     }
 
-    let db_pool = (*pool).clone();
-    let body = web::block(move || {
-        let ctx = create_context(db_pool);
-        let res = data.execute_sync(&st, &ctx);
+    let db_pool = (*db_pool).clone();
+    let ctx = create_context(db_pool);
+    let res = data.execute(&st, &ctx).await;
 
-        Ok::<_, serde_json::error::Error>(serde_json::to_string(&res)?)
-    })
-    .await?;
-
-    Ok(HttpResponse::Ok()
-        .content_type("application/json")
-        .body(body))
+    Ok(HttpResponse::Ok().json(res))
 }
 
 fn validate_key<'a>(headers: &'a HeaderMap, key: &'a Key) -> Result<(), &'a str> {
