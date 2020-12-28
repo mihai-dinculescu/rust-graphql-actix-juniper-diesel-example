@@ -31,8 +31,8 @@ pub async fn graphql(
     // fetch data from
     // query string if this is a GET
     // body if this is a POST
-    let data = match req.method() {
-        &Method::GET => data_query.unwrap().into_inner(),
+    let data = match *req.method() {
+        Method::GET => data_query.unwrap().into_inner(),
         _ => data_body.unwrap().into_inner(),
     };
 
@@ -49,9 +49,7 @@ pub async fn graphql(
     }
 
     let body = web::block(move || {
-        let db_pool = pool
-            .get()
-            .map_err(|e| serde_json::error::Error::custom(e))?;
+        let db_pool = pool.get().map_err(serde_json::error::Error::custom)?;
 
         let ctx = create_context(db_pool);
         let res = data.execute(&st, &ctx);
@@ -70,7 +68,7 @@ fn validate_key<'a>(headers: &'a HeaderMap, key: &'a Key) -> Result<(), &'a str>
         Some(value) => {
             let value = value
                 .to_str()
-                .map_err(|e| serde_json::error::Error::custom(e))
+                .map_err(serde_json::error::Error::custom)
                 .unwrap();
 
             if value != key.value {

@@ -1,5 +1,8 @@
 # Overview
 
+[![CI][ci_badge]][ci]
+[![codecov][codecov_badge]][codecov]
+
 This is an example project that puts together Rust, Actix, Juniper and Diesel.
 
 I've started with only very little knowledge of Rust. The learning curve was pretty steep but well worth the effort in the end. I'm sharing this example project in the hope that it will save someone time and prevent frustration.
@@ -11,6 +14,10 @@ I've started with only very little knowledge of Rust. The learning curve was pre
 - Database Access (Diesel + Postgres)
   - Pending migrations run automatically on web server startup
 - Authentication (API key in headers)
+- cargo-make support
+- Github Actions workflows
+  - CI: format, check, clippy, tests, code coverage
+  - Security audit
 
 ```
 {
@@ -27,6 +34,12 @@ I've started with only very little knowledge of Rust. The learning curve was pre
 ## Rust & Cargo
 
 Install `rust` and `cargo` via `rustup` (https://rustup.rs/). The stable version is OK.
+
+## cargo-make
+
+```
+cargo install cargo-make
+```
 
 ## Diesel CLI
 
@@ -53,13 +66,13 @@ CREATE DATABASE rust_graphql_example_test;
 Access to a postgres instance is required.
 
 ```
-cargo run
+cargo make run
 ```
 
 or
 
 ```
-cargo watch -x run
+cargo make watch
 ```
 
 Open http://localhost:8080/playground.
@@ -67,7 +80,7 @@ Open http://localhost:8080/playground.
 # Run Integration tests
 
 ```
-cargo test
+cargo make test
 ```
 
 # Run in Docker
@@ -78,3 +91,8 @@ docker-compose up
 ```
 
 Open http://localhost:8080/playground.
+
+[ci_badge]: https://github.com/mihai-dinculescu/rust-graphql-actix-juniper-diesel-example/workflows/CI/badge.svg?branch=master
+[ci]: https://github.com/mihai-dinculescu/rust-graphql-actix-juniper-diesel-example/actions
+[codecov_badge]: https://codecov.io/gh/mihai-dinculescu/rust-graphql-actix-juniper-diesel-example/branch/master/graph/badge.svg
+[codecov]: https://codecov.io/gh/mihai-dinculescu/rust-graphql-actix-juniper-diesel-example

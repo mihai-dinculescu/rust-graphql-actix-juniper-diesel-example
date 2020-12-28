@@ -34,5 +34,5 @@ pub fn establish_connection(db_kind: DatabaseKind) -> DbPool {
         postgres_user, postgres_password, postgres_db_host, postgres_db
     );
 
-    init_pool(&database_url).expect(&format!("Error connecting to {}", database_url))
+    init_pool(&database_url).unwrap_or_else(|_| panic!("Error connecting to {}", database_url))
 }

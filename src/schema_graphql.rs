@@ -23,7 +23,7 @@ impl QueryRoot {
         let connection: &PgConnection = &context.db;
 
         let result = ThermostatStatus::get_latest(connection)?;
-        return Ok(result);
+        Ok(result)
     }
 
     #[graphql(description = "Query the thermostat status history")]
@@ -31,7 +31,7 @@ impl QueryRoot {
         let connection: &PgConnection = &context.db;
 
         let results = ThermostatStatus::get_history(connection)?;
-        return Ok(results);
+        Ok(results)
     }
 }
 
@@ -49,7 +49,7 @@ impl MutationRoot {
         ThermostatStatus::insert(connection, data)?;
 
         let result = ThermostatStatus::get_latest(connection)?;
-        return Ok(result);
+        Ok(result)
     }
 }
 

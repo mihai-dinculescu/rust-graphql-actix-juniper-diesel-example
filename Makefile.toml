@@ -1,0 +1,45 @@
+[env]
+CARGO_MAKE_EXTEND_WORKSPACE_MAKEFILE = "true"
+
+[config]
+skip_core_tasks = true
+
+[tasks.run]
+command = "cargo"
+args = ["run"]
+
+[tasks.watch]
+command = "cargo"
+args = ["watch", "-x", "run"]
+
+[tasks.coverage]
+command = "cargo"
+args = ["tarpaulin", "--verbose", "--all-features", "--ignore-tests", "--timeout", "120", "--out", "Xml"]
+
+[tasks.ci-flow]
+dependencies = [
+    "format",
+    "check",
+    "clippy",
+    "test"
+]
+
+[tasks.format]
+command = "cargo"
+args = ["fmt", "--verbose", "--", "--check"]
+
+[tasks.check]
+command = "cargo"
+args = ["check", "--verbose"]
+
+[tasks.clippy]
+command = "cargo"
+args = ["clippy", "--all-targets", "--all-features", "--verbose", "--", "-D", "warnings"]
+
+[tasks.test]
+command = "cargo"
+args = ["test", "--verbose"]
+
+[tasks.audit]
+command = "cargo"
+args = ["audit"]

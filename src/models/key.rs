@@ -5,6 +5,6 @@ pub struct Key {
 
 impl Key {
     pub fn new(value: String) -> Key {
-        Key { value: value }
+        Key { value }
     }
 }
