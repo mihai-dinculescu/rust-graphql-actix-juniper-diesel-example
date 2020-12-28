@@ -42,9 +42,7 @@ pub async fn graphql(
         if let Err(e) = validate_key(&headers, key.get_ref()) {
             let err = GraphQLErrors::new(e);
 
-            return Ok(HttpResponse::Ok()
-                .content_type("application/json")
-                .body(serde_json::to_string(&err).unwrap()));
+            return Ok(HttpResponse::Ok().json(&err));
         }
     }
 
