@@ -12,7 +12,7 @@ use crate::models::key::Key;
 use crate::schema_graphql::{create_context, SchemaGraphQL};
 
 pub async fn playground() -> HttpResponse {
-    let html = playground_source("/graphql");
+    let html = playground_source("/graphql", None);
     HttpResponse::Ok()
         .content_type("text/html; charset=utf-8")
         .body(html)
@@ -46,11 +46,10 @@ pub async fn graphql(
         }
     }
 
+    let db_pool = (*pool).clone();
     let body = web::block(move || {
-        let db_pool = pool.get().map_err(serde_json::error::Error::custom)?;
-
         let ctx = create_context(db_pool);
-        let res = data.execute(&st, &ctx);
+        let res = data.execute_sync(&st, &ctx);
 
         Ok::<_, serde_json::error::Error>(serde_json::to_string(&res)?)
     })

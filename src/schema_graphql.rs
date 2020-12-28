@@ -1,26 +1,25 @@
 use std::sync::Arc;
 
-use diesel::PgConnection;
-use juniper::FieldResult;
-use juniper::RootNode;
+use juniper::{graphql_object, RootNode};
+use juniper::{EmptySubscription, FieldResult};
 
-use crate::db::DbPooledConnection;
+use crate::db::DbPool;
 use crate::models::thermostat_status::*;
 
 #[derive(Clone)]
 pub struct Context {
-    pub db: Arc<DbPooledConnection>,
+    pub db_pool: Arc<DbPool>,
 }
 
 impl juniper::Context for Context {}
 
 pub struct QueryRoot;
 
-#[juniper::object(Context = Context)]
+#[graphql_object(context = Context)]
 impl QueryRoot {
     #[graphql(description = "Query the current (latest) thermostat status")]
     fn thermostat_status(context: &Context) -> FieldResult<ThermostatStatus> {
-        let connection: &PgConnection = &context.db;
+        let connection = &context.db_pool.get()?;
 
         let result = ThermostatStatus::get_latest(connection)?;
         Ok(result)
@@ -28,7 +27,7 @@ impl QueryRoot {
 
     #[graphql(description = "Query the thermostat status history")]
     fn thermostat_status_history(context: &Context) -> FieldResult<Vec<ThermostatStatus>> {
-        let connection: &PgConnection = &context.db;
+        let connection = &context.db_pool.get()?;
 
         let results = ThermostatStatus::get_history(connection)?;
         Ok(results)
@@ -37,14 +36,14 @@ impl QueryRoot {
 
 pub struct MutationRoot;
 
-#[juniper::object(Context = Context)]
+#[graphql_object(context = Context)]
 impl MutationRoot {
     #[graphql(description = "Set the thermostat status")]
     fn set_thermostat_status(
         context: &Context,
         data: NewThermostatStatus,
     ) -> FieldResult<ThermostatStatus> {
-        let connection: &PgConnection = &context.db;
+        let connection = &context.db_pool.get()?;
 
         ThermostatStatus::insert(connection, data)?;
 
@@ -53,14 +52,12 @@ impl MutationRoot {
     }
 }
 
-pub type SchemaGraphQL = RootNode<'static, QueryRoot, MutationRoot>;
+pub type SchemaGraphQL = RootNode<'static, QueryRoot, MutationRoot, EmptySubscription<Context>>;
 
 pub fn create_schema() -> SchemaGraphQL {
-    SchemaGraphQL::new(QueryRoot {}, MutationRoot {})
+    SchemaGraphQL::new(QueryRoot {}, MutationRoot {}, EmptySubscription::new())
 }
 
-pub fn create_context(pg_pool: DbPooledConnection) -> Context {
-    Context {
-        db: Arc::new(pg_pool),
-    }
+pub fn create_context(db_pool: Arc<DbPool>) -> Context {
+    Context { db_pool }
 }
