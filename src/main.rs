@@ -45,7 +45,11 @@ async fn main() -> io::Result<()> {
             .data(key.clone())
             .wrap(middleware::Compress::default())
             .wrap(middleware::Logger::default())
-            .wrap(Cors::default()) // allow all cross origin requests
+            .wrap(
+                Cors::default()
+                    .allowed_origin("http://localhost:8080")
+                    .allowed_methods(vec!["GET", "POST"]),
+            ) // allow all cross origin requests
             .service(
                 web::resource("/graphql")
                     .route(web::get().to(graphql))
