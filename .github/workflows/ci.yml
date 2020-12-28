@@ -31,6 +31,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - name: Install latest nightly
         uses: actions-rs/toolchain@v1
         with:

@@ -13,11 +13,8 @@ I've started with only very little knowledge of Rust. The learning curve was pre
 - Queries using both POST and GET
 - Database Access (Diesel + Postgres)
   - Pending migrations run automatically on web server startup
+- Cors
 - Authentication (API key in headers)
-- cargo-make support
-- Github Actions workflows
-  - CI: format, check, clippy, tests, code coverage
-  - Security audit
 
 ```
 {
@@ -25,9 +22,13 @@ I've started with only very little knowledge of Rust. The learning curve was pre
 }
 ```
 
-- Cors
 - Integration tests
+- cargo-make support
 - Docker Compose
+- Github Actions workflows
+
+  - CI: format, check, clippy, tests, code coverage
+  - Security audit
 
 # Setup
 
